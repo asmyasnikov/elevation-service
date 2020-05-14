@@ -16,12 +16,14 @@ module.exports = async (req, res) => {
   }
 
   const geojson = await json(req, {limit: maxPostSize})
+  console.log(geojson)
   if (!geojson || Object.keys(geojson).length === 0) {
     return send(res, 400, {error: 'invalid GeoJSON'})
   }
 
   return new Promise((resolve, reject) => {
     addElevation(geojson, tiles, function(err, geojson) {
+      console.log(err, geojson)
       if (err) {
         return send(res, 500, err)
       }
