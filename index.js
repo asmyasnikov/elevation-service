@@ -1,5 +1,6 @@
 const {json, send} = require('micro')
-const cors = require('micro-cors')()
+const microCors = require('micro-cors')
+const cors = microCors({ allowMethods: ['POST'] })
 const coordEach = require('@turf/meta').coordEach;
 const TileSet = require('node-hgt').TileSet
 const ImagicoElevationDownloader = require('node-hgt').ImagicoElevationDownloader
@@ -45,6 +46,9 @@ const addElevation = function(geojson, elevationProvider, cb, nodata) {
 }
 
 module.exports = cors(async (req, res) => {
+  if (req.method === 'OPTIONS') {
+    return send(res, 200, 'ok!');
+  }
   if (req.method !== 'POST') {
     return send(res, 405, {error: 'Only POST allowed'})
   }
