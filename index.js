@@ -1,4 +1,5 @@
 const {json, send} = require('micro')
+const cors = require('micro-cors')()
 const coordEach = require('@turf/meta').coordEach;
 const TileSet = require('node-hgt').TileSet
 const ImagicoElevationDownloader = require('node-hgt').ImagicoElevationDownloader
@@ -43,13 +44,12 @@ const addElevation = function(geojson, elevationProvider, cb, nodata) {
   }
 }
 
-module.exports = async (req, res) => {
+module.exports = cors(async (req, res) => {
   if (req.method !== 'POST') {
     return send(res, 405, {error: 'Only POST allowed'})
   }
 
   const geojson = await json(req, {limit: maxPostSize})
-  console.log(geojson)
   if (!geojson || Object.keys(geojson).length === 0) {
     return send(res, 400, {error: 'invalid GeoJSON'})
   }
@@ -64,4 +64,4 @@ module.exports = async (req, res) => {
       resolve(geojson)
     }, noData)
   })
-}
+});

@@ -23,6 +23,7 @@
   "dependencies": {
     "geojson-elevation": "^1.1.1",
     "micro": "^9.1.0",
+    "micro-cors": "^0.1.1",
     "node-hgt": "^1.2.2"
   },
   "devDependencies": {
